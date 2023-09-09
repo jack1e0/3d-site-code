@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "three": "^0.155.0"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "vite": "^4.4.9"
+  }
+}
