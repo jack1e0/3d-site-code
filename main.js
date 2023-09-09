@@ -2,7 +2,6 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
 // 3 things needed for scene: SCENE, CAMERA, RENDERER
 // Note: When first opening folder, run: 'npx vite'
@@ -11,7 +10,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdbd5d0);
 
 const camera = new THREE.OrthographicCamera(-1 * window.innerWidth / 16, window.innerWidth / 16, window.innerHeight / 16, -1 * window.innerHeight / 16);
-camera.position.set(30, 30, 42);
+camera.position.set(30, 50, 42);
 
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector('#bg')
@@ -45,7 +44,7 @@ scene.add(directionalLightRight);
 
 // ORBIT CONTROL 
 const orbitControl = new OrbitControls(camera, renderer.domElement);
-orbitControl.target.set(1, 20, 0);
+orbitControl.target.set(1, 32, 0);
 
 orbitControl.rotateSpeed = 0.5;
 orbitControl.maxPolarAngle = Math.PI / 2 - 0.1;
@@ -70,75 +69,64 @@ scene.add(ambientLight);
 
 //2D stuff
 
-// Setting up renderer
-// const labelRenderer = new CSS2DRenderer();
-// labelRenderer.setSize(window.innerWidth, window.innerHeight);
-// labelRenderer.domElement.style.position = 'fixed';
-// labelRenderer.domElement.style.top = '0px';
-// labelRenderer.domElement.style.pointerEvents = 'none';
-
-// const para = document.createElement('p');
-// para.textContent = "Welcome!";
-
-// const div = document.createElement('div');
-// div.appendChild(para);
-// const obj = new CSS2DObject(div);
-// scene.add(obj);
-
-// document.body.appendChild(labelRenderer.domElement);
 const d = document.getElementById('text');
-d.style.zIndex = 100;
-d.style.position = 'absolute';
+d.style.pointerEvents = 'none';
+var welc = document.getElementById('welcome');
+var shouldHeadingShow = true;
 
 
 function handleMouseScroll(event) {
     const delta = event.deltaY;
-    if (delta > 0) {
+    if (delta < 0) {
         if (camera.position.y <= 45) {
-            camera.position.y += delta * 0.01;
-            orbitControl.target.y += delta * 0.01;
+            camera.position.y -= delta * 0.01;
+            orbitControl.target.y -= delta * 0.01;
         }
     } else {
         if (camera.position.y >= 5) {
-            camera.position.y += delta * 0.01;
-            orbitControl.target.y += delta * 0.01;
+            camera.position.y -= delta * 0.01;
+            orbitControl.target.y -= delta * 0.01;
+        }
+    }
+
+
+    if (welc.classList.contains('reveal')) {
+        welc.classList.remove('reveal');
+
+        if (shouldHeadingShow) {
+            const timeout = 1000; // 1s
+            setTimeout(() => {
+                welc.textContent = "Drag and scroll to explore.";
+                welc.style.fontSize = '40px';
+                welc.style.paddingTop = '100px';
+                welc.classList.add('reveal');
+                shouldHeadingShow = false;
+            }, timeout);
         }
     }
 }
 
-function updateTextPos() {
-    const vector = new THREE.Vector3();
-    camera.getWorldPosition(vector);
-    vector.project(camera);
-
-    // Map the 3D position to 2D screen coordinates
-    const x = (vector.x + 1) * window.innerWidth / 2;
-    const y = (-vector.y + 1) * window.innerHeight / 2;
-
-    // Update the position of the text element
-    //div.style.transform = `translate(${x}px, ${y}px)`;
-}
 
 function resize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    //labelRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function animate() {
     requestAnimationFrame(animate);
 
     renderer.render(scene, camera);
-    //labelRenderer.render(scene, camera);
 
     orbitControl.update();
-    console.log(div.style.transform);
-    //updateTextPos();
 }
 
 window.addEventListener('wheel', handleMouseScroll);
 window.addEventListener('resize', resize);
+
+document.addEventListener('DOMContentLoaded', function () {
+    welc.classList.add('reveal');
+})
 
 animate();
 

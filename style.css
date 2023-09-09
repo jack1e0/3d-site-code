@@ -3,3 +3,32 @@ canvas {
     top: 0;
     left: 0;
 }
+
+/* prevent scrolling */
+body {
+    overflow: hidden;
+}
+
+.text {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.welcome {
+    font-size: 70px;
+    padding-top: 40px;
+    opacity: 0;
+    transform: translateY(50px);
+
+    transition: opacity 1.5s ease,
+        transform 1.5s ease;
+}
+
+.reveal {
+    transform: translateY(0px);
+    opacity: 1;
+}
