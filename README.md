@@ -1,2 +1,2 @@
-# 3D-Site
+# Code for 3d site
 Trying three js
