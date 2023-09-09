@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // 3 things needed for scene: SCENE, CAMERA, RENDERER
-// Note: When first opening folder, run: 'npx vite'
+// Note: When first opening folder, run: 'npx parcel ./index.html'
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdbd5d0);
